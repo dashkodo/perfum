@@ -64,9 +64,9 @@ export default {
       }
     },
     async fetchSheet() {
-      const sheetId = process.env.SHEET_ID;
-      const range = process.env.SHEET_RANGE;
-      const api_key = process.env.GOOGLE_API_KEY;
+      const sheetId = process.env.VUE_APP_SHEET_ID;
+      const range = process.env.VUE_APP_SHEET_RANGE;
+      const api_key = process.env.VUE_APP_GOOGLE_API_KEY;
       const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?alt=json&key=${api_key}`;
       try {
         const res = await axios.get(url);
