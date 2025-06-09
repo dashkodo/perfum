@@ -99,7 +99,7 @@ body {
   color: #ffffff;
 
   margin-top: 60px;
-  background: linear-gradient(90deg, rgba(154, 57, 163, 1) 0%, rgb(9, 43, 102) 100%);
+  background: linear-gradient(90deg, rgb(42, 29, 43) 0%, rgb(3, 27, 67) 100%);
 }
 h1 {
   color: #ffffff;
