@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>Колекція парфумів</h1>
+    <h1>Колекція парфумів <span v-if="rawData.length">({{ rawData.length }})</span></h1>
     <input v-model="search" placeholder="Search..." class="search-bar" />
     <table v-if="filteredData.length">
       <thead>
@@ -56,6 +56,9 @@ export default {
   },
   methods: {
     sortBy(header) {
+      if(this.sortKey === "" && header === "№") {
+        return; // Do not sort by "№"
+      }
       if (this.sortKey === header) {
         this.sortOrder *= -1;
       } else {
@@ -71,13 +74,14 @@ export default {
       try {
         const res = await axios.get(url);
         const [headerRow, ...rows] = res.data.values;
-        this.headers = headerRow;
+        this.headers = ["№", ...headerRow];
         this.rawData = rows
           .filter((row) => row[0] && row[0].trim() !== "") // skip rows where first column is empty
-          .map((row) => {
+          .map((row, i) => {
             const obj = {};
-            headerRow.forEach((h, i) => {
-              obj[h] = row[i] || "";
+            obj["№"] = i + 1;
+            headerRow.forEach((h, idx) => {
+              obj[h] = row[idx] || "";
             });
             return obj;
           });
@@ -162,8 +166,54 @@ th {
 tr:nth-child(even){
   background: #f4f4f4;
 }
-
+td:first-child, th:first-child {
+    font-weight: bold;
+    text-align: right;
+}
+td:nth-child(2) td:last-child {
+    text-align: left;
+}
+td:nth-child(2) {
+    font-weight: bold;
+}
 tr {
   background: #f9f9f9;
+}
+x
+@media (max-width: 600px) {
+  body {
+    margin-top: 20px;
+    font-size: 1em;
+  }
+  h1 {
+    font-size: 1.3em;
+    margin-bottom: 10px;
+  }
+  .search-bar {
+    width: 90vw;
+    min-width: 0;
+    max-width: 98vw;
+    height: 44px;
+    font-size: 1em;
+    padding: 0 20px;
+  }
+  table {
+    width: 98vw;
+    font-size: 0.9em;
+    overflow-x: auto;
+    display: block;
+  }
+  th, td {
+    padding: 4px;
+    font-size: 0.95em;
+    word-break: break-word;
+  }
+  td:first-child {
+    font-weight: bold;
+    text-align: left;
+  }
+  #app {
+    padding: 0 2vw;
+  }
 }
 </style>
